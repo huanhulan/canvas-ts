@@ -4,10 +4,10 @@ import * as Interface from './interface';
 
 
 class Renderer extends Interface.AbstractRender {
-    protected PARTICLE_COUNT = 2000;
-    protected PARTICLE_RADIUS = 1;
+    protected PARTICLE_COUNT = 5000;
+    protected PARTICLE_RADIUS = 0.5;
     protected MAX_ROTATION_ANGLE = Math.PI / 60;
-    protected TRANSLATION_COUNT = 500;
+    protected TRANSLATION_COUNT = 500;// countdown
 
     constructor() {
         super();

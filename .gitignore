@@ -36,3 +36,6 @@ Temporary Items
 
 # npm package
 node_modules
+
+# bundle files
+dist/*

@@ -40,12 +40,12 @@ class Renderer extends Interface.AbstractRender {
         this.theta = 0;
 
         this.strategies = new Strategy().strategies;
-        this.particles = [];
+        this.particles = new Array(this.PARTICLE_COUNT);
     }
 
     createParticles() {
         for (let i = 0; i < this.PARTICLE_COUNT; i++) {
-            this.particles.push(new Particle(this.center));
+            this.particles[i] = new Particle(this.center);
         }
     }
 
@@ -69,34 +69,33 @@ class Renderer extends Interface.AbstractRender {
     }
 
     setupFigure() {
-        for (let i = 0, length = this.particles.length; i < length; i++) {
-            this.particles[i].setAxis(this.strategies[this.strategyIndex]());
-        }
-        if (++this.strategyIndex == this.strategies.length) {
-            this.strategyIndex = 0;
-        }
+        let self = this;
+        this.particles.map((el) => {
+            el.setAxis(self.strategies[self.strategyIndex]());
+        });
+        this.strategyIndex = ++this.strategyIndex % this.strategies.length;
         this.translationCount = 0;
     }
 
     drawFigure() {
+        let self = this;
+
         requestAnimationFrame(this.drawFigure);
         this.context.fillStyle = 'rgba(0, 0, 0, 0.2)';
         this.context.fillRect(0, 0, this.width, this.height);
-
-        for (let i = 0, length = this.particles.length; i < length; i++) {
-            let axis = this.particles[i].getAxis2D(this.theta);
-            this.context.beginPath();
-            this.context.fillStyle = axis.color;
-            this.context.arc(axis.x, axis.y, this.PARTICLE_RADIUS, 0, Math.PI * 2, false);
-            this.context.fill();
-        }
+        this.particles.map((el)=>{
+            let axis = el.getAxis2D(self.theta);
+            self.context.beginPath();
+            self.context.fillStyle = axis.color;
+            self.context.arc(axis.x, axis.y, self.PARTICLE_RADIUS, 0, Math.PI * 2, false);
+            self.context.fill();
+        });
         this.theta++;
         this.theta %= 360;
-
-        for (let i = 0, length = this.particles.length; i < length; i++) {
-            this.particles[i].rotateX(this.rotationX);
-            this.particles[i].rotateY(this.rotationY);
-        }
+        this.particles.map((el)=>{
+            el.rotateX(self.rotationX);
+            el.rotateY(self.rotationY);
+        });
         this.translationCount++;
         this.translationCount %= this.TRANSLATION_COUNT;
 

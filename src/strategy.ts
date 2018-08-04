@@ -16,7 +16,8 @@ class Strategy {
             if (fArray.indexOf(i) === -1 || typeof this[i] !== 'function') {
                 continue;
             }
-            let f: () => {} = this[i];
+            let f = this[i];
+            // @ts-ignore
             strategies.push(f.bind(this));
         }
         return strategies;
